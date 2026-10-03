@@ -1,0 +1,1301 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Система Лидера — программа «30 дней» для новичков сетевого бизнеса, клуб PRO, правила 2026 и проверка текста на стоп-слова.">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Система Лидера</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: «проектный план» — страница как план запуска: шкала из 30 клеток-дней проходит через hero и кабинет */
+:root {
+  --paper: #F2F5F3;
+  --surface: #FFFFFF;
+  --ink: #14201C;
+  --muted: #56645E;
+  --line: #D3DCD8;
+  --accent: #2340C8;
+  --accent-soft: #E3E8FB;
+  --accent-ink: #FFFFFF;
+  --done: #D9970A;
+  --done-soft: #F8EAC6;
+  --warn: #B23F18;
+  --warn-soft: #FBE6DD;
+  --ok: #1D7A4E;
+  --f-display: "Unbounded", "Arial Black", system-ui, sans-serif;
+  --f-body: "Golos Text", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0E1412; --surface: #16201C; --ink: #E5EDE9; --muted: #97A59F; --line: #29352F;
+    --accent: #8197FF; --accent-soft: #1D2547; --accent-ink: #0E1412;
+    --done: #F0B53C; --done-soft: #3B2F12; --warn: #FF8C63; --warn-soft: #3D2018; --ok: #5ED39C;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0E1412; --surface: #16201C; --ink: #E5EDE9; --muted: #97A59F; --line: #29352F;
+  --accent: #8197FF; --accent-soft: #1D2547; --accent-ink: #0E1412;
+  --done: #F0B53C; --done-soft: #3B2F12; --warn: #FF8C63; --warn-soft: #3D2018; --ok: #5ED39C;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: var(--f-body); font-size: 16px; line-height: 1.55;
+}
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 20px; }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 700; line-height: 1.15; text-wrap: balance; margin: 0; }
+h2 { font-size: clamp(1.5rem, 3.2vw, 2.2rem); }
+h3 { font-size: 1.05rem; font-weight: 500; }
+p { margin: 0; }
+a { color: var(--accent); }
+.eyebrow { font-family: var(--f-mono); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.lead { font-size: 1.12rem; color: var(--muted); max-width: 62ch; }
+.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+/* ---------- шапка ---------- */
+.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);
+}
+.top .wrap { display: flex; align-items: center; gap: 20px; min-height: 58px; flex-wrap: wrap; }
+.brand { font-family: var(--f-display); font-weight: 700; font-size: .95rem; color: var(--ink); text-decoration: none; display: flex; align-items: center; gap: 10px; }
+.brand-mark { width: 22px; height: 22px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+.brand-mark i { background: var(--accent); border-radius: 1px; }
+.brand-mark i:nth-child(n+5) { background: var(--done); }
+.nav { display: flex; gap: 4px 18px; flex-wrap: wrap; margin-left: auto; font-size: .92rem; }
+.nav a { color: var(--muted); text-decoration: none; }
+.nav a:hover { color: var(--ink); }
+
+/* ---------- кнопки ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font: 600 .95rem var(--f-body); padding: 12px 20px; border-radius: 8px;
+  border: 1.5px solid var(--accent); background: var(--accent); color: var(--accent-ink);
+  cursor: pointer; text-decoration: none; transition: transform .12s ease, filter .12s ease;
+}
+.btn:hover { filter: brightness(1.08); }
+.btn:active { transform: translateY(1px); }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn.quiet { background: transparent; color: var(--muted); border-color: var(--line); }
+.btn.small { padding: 8px 14px; font-size: .88rem; }
+.btn[disabled] { opacity: .45; cursor: not-allowed; filter: none; }
+
+/* ---------- hero ---------- */
+.hero { padding-block: 56px 40px; }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 40px; align-items: end; }
+.hero h1 { font-size: clamp(2.2rem, 6vw, 4.2rem); letter-spacing: -.01em; margin-block: 14px 18px; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero .cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+.quote { border-left: 3px solid var(--done); padding: 4px 0 4px 18px; font-size: 1.05rem; }
+.quote small { display: block; color: var(--muted); margin-top: 8px; font-size: .85rem; }
+
+/* шкала 30 дней */
+.strip { margin-top: 44px; }
+.strip-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.strip-cells { display: grid; grid-template-columns: repeat(30, minmax(0, 1fr)); gap: 3px; }
+.strip-cells span {
+  height: 34px; border-radius: 3px; background: var(--surface); border: 1px solid var(--line);
+  font: 500 .62rem var(--f-mono); color: var(--muted); display: grid; place-items: end center; padding-bottom: 2px;
+}
+.strip-cells span.done { background: var(--done); border-color: var(--done); color: var(--paper); }
+.strip-cells span.now { border: 2px solid var(--accent); color: var(--accent); }
+.strip-weeks { display: grid; grid-template-columns: 7fr 7fr 7fr 9fr; gap: 3px; margin-top: 6px; }
+.strip-weeks div { border-top: 2px solid var(--ink); padding-top: 6px; font-size: .78rem; color: var(--muted); min-width: 0; }
+.strip-weeks b { color: var(--ink); font-weight: 600; display: block; }
+@media (max-width: 640px) {
+  .strip-cells { grid-template-columns: repeat(15, minmax(0, 1fr)); }
+  .strip-weeks { grid-template-columns: 1fr 1fr; }
+}
+
+/* ---------- секции ---------- */
+section.block { padding-block: 64px; border-top: 1px solid var(--line); }
+.block-head { display: grid; gap: 12px; margin-bottom: 32px; }
+
+.problems { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+.problems div { display: grid; gap: 8px; align-content: start; }
+.problems .num { font: 700 2rem var(--f-display); color: var(--accent); }
+@media (max-width: 860px) { .problems { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .problems { grid-template-columns: 1fr; } }
+
+.parts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.part { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; display: grid; gap: 10px; align-content: start; }
+.part .tag { font: 600 .72rem var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.part ul { margin: 0; padding-left: 18px; color: var(--muted); }
+.part a { font-weight: 600; text-decoration: none; }
+@media (max-width: 860px) { .parts { grid-template-columns: 1fr; } }
+
+/* ---------- кабинет ---------- */
+.cab { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.cab-bar { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; padding: 18px 22px; border-bottom: 1px solid var(--line); }
+.cab-bar .who { display: grid; gap: 2px; min-width: 0; }
+.cab-bar .who b { font-size: 1.05rem; }
+.cab-bar .who span { color: var(--muted); font-size: .88rem; overflow-wrap: anywhere; }
+.kpis { display: flex; gap: 22px; margin-left: auto; flex-wrap: wrap; }
+.kpi { display: grid; }
+.kpi b { font: 600 1.35rem var(--f-mono); font-variant-numeric: tabular-nums; }
+.kpi span { font-size: .75rem; color: var(--muted); }
+.tabs { display: flex; gap: 4px; padding: 0 16px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+.tab { font: 600 .9rem var(--f-body); padding: 13px 12px; background: none; border: 0; border-bottom: 2.5px solid transparent; color: var(--muted); cursor: pointer; white-space: nowrap; }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.tab .badge { font: 600 .7rem var(--f-mono); background: var(--warn); color: var(--paper); border-radius: 99px; padding: 1px 6px; margin-left: 4px; }
+.pane { padding: 22px; }
+
+.banner { border-radius: 8px; padding: 12px 16px; font-size: .94rem; display: flex; gap: 10px; align-items: flex-start; margin-bottom: 16px; }
+.banner.warn { background: var(--warn-soft); color: var(--ink); border-left: 4px solid var(--warn); }
+.banner.info { background: var(--accent-soft); border-left: 4px solid var(--accent); }
+.banner.good { background: var(--done-soft); border-left: 4px solid var(--done); }
+
+.prog { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 24px; }
+@media (max-width: 860px) { .prog { grid-template-columns: 1fr; } }
+.task { display: grid; gap: 14px; align-content: start; }
+.task-meta { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.pill { font: 600 .72rem var(--f-mono); padding: 4px 9px; border-radius: 99px; background: var(--paper); border: 1px solid var(--line); color: var(--muted); }
+.pill.done { background: var(--done-soft); border-color: var(--done); color: var(--ink); }
+.pill.now { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.task h3 { font-size: 1.45rem; font-weight: 700; }
+.task-text { white-space: pre-line; max-width: 64ch; }
+.task-result { background: var(--paper); border-radius: 8px; padding: 12px 14px; font-size: .94rem; }
+.task-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.task-actions .note { color: var(--muted); font-size: .88rem; }
+
+.days { display: grid; gap: 14px; align-content: start; }
+.week h4 { margin: 0 0 6px; font: 600 .78rem var(--f-mono); letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+.week ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.day-btn {
+  width: 100%; display: grid; grid-template-columns: 34px minmax(0, 1fr) 18px; gap: 8px; align-items: center;
+  text-align: left; background: none; border: 0; border-radius: 6px; padding: 6px 8px; cursor: pointer;
+  font: .9rem var(--f-body); color: var(--ink);
+}
+.day-btn:hover { background: var(--paper); }
+.day-btn.sel { background: var(--accent-soft); }
+.day-btn .d { font: 600 .78rem var(--f-mono); color: var(--muted); }
+.day-btn .t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.day-btn .s { width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid var(--line); }
+.day-btn.is-done .s { background: var(--done); border-color: var(--done); }
+.day-btn.is-now .s { border-color: var(--accent); background: var(--accent-soft); }
+.day-btn.is-done .t { color: var(--muted); }
+
+/* онбординг */
+.onb { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; }
+@media (max-width: 860px) { .onb { grid-template-columns: 1fr; } }
+.onb-copy { display: grid; gap: 14px; align-content: start; }
+.onb-copy ul { margin: 0; padding-left: 18px; color: var(--muted); display: grid; gap: 6px; }
+form.stack { display: grid; gap: 14px; }
+label.f { display: grid; gap: 6px; font-weight: 600; font-size: .9rem; }
+label.f small { font-weight: 400; color: var(--muted); }
+input[type="text"], textarea, select {
+  font: 1rem var(--f-body); color: var(--ink); background: var(--paper);
+  border: 1.5px solid var(--line); border-radius: 8px; padding: 10px 12px; width: 100%;
+}
+textarea { resize: vertical; min-height: 84px; }
+input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); }
+.roles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.roles label { border: 1.5px solid var(--line); border-radius: 8px; padding: 10px; cursor: pointer; display: grid; gap: 2px; font-size: .88rem; }
+.roles label b { font-size: .95rem; }
+.roles label span { color: var(--muted); font-size: .8rem; }
+.roles input { position: absolute; opacity: 0; pointer-events: none; }
+.roles label:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.roles label:has(input:focus-visible) { outline: 3px solid var(--accent); outline-offset: 2px; }
+@media (max-width: 480px) { .roles { grid-template-columns: 1fr; } }
+.check { display: flex; gap: 10px; align-items: flex-start; font-size: .88rem; color: var(--muted); }
+.check input { margin-top: 4px; accent-color: var(--accent); }
+.err { color: var(--warn); font-size: .88rem; }
+
+/* контакты */
+.c-form { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr) minmax(0, 1.2fr) auto; gap: 10px; align-items: end; margin-bottom: 18px; }
+@media (max-width: 760px) { .c-form { grid-template-columns: 1fr 1fr; } .c-form .f:first-child { grid-column: 1 / -1; } }
+.table-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: .93rem; }
+th, td { text-align: left; padding: 10px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 600 .74rem var(--f-mono); letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+td.num, th.num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+tr.due td { background: var(--warn-soft); }
+.row-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.linkbtn { background: none; border: 0; color: var(--accent); font: 600 .85rem var(--f-body); cursor: pointer; padding: 2px 0; }
+.linkbtn.danger { color: var(--warn); }
+.empty { color: var(--muted); padding: 18px 0; }
+.summary-row { display: flex; gap: 22px; flex-wrap: wrap; margin-bottom: 14px; color: var(--muted); font-size: .9rem; }
+.summary-row b { color: var(--ink); font-family: var(--f-mono); }
+
+/* ---------- PRO ---------- */
+.tariffs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 860px) { .tariffs { grid-template-columns: 1fr; } }
+.tariff { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; display: grid; gap: 14px; grid-template-rows: auto auto 1fr auto; }
+.tariff.featured { border: 2px solid var(--accent); }
+.tariff .price { font: 700 1.9rem var(--f-display); font-variant-numeric: tabular-nums; }
+.tariff .price small { font: 500 .9rem var(--f-body); color: var(--muted); }
+.tariff ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+.tariff .hint { font-size: .82rem; color: var(--muted); }
+.topics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin-top: 32px; border-top: 1px solid var(--line); }
+.topics div { padding: 14px 14px 14px 0; border-bottom: 1px solid var(--line); display: grid; gap: 4px; min-width: 0; }
+.topics b { font-size: .95rem; }
+.topics span { color: var(--muted); font-size: .85rem; }
+@media (max-width: 860px) { .topics { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ---------- правила ---------- */
+.rules { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 32px; }
+@media (max-width: 860px) { .rules { grid-template-columns: 1fr; } }
+.words td:first-child { color: var(--warn); font-weight: 600; }
+.words td:last-child { color: var(--ok); }
+.checker { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; display: grid; gap: 12px; align-content: start; }
+.checker-out { background: var(--paper); border-radius: 8px; padding: 12px 14px; white-space: pre-wrap; overflow-wrap: anywhere; min-height: 60px; font-size: .95rem; }
+.checker-out mark { background: var(--warn-soft); color: var(--warn); border-bottom: 2px solid var(--warn); padding: 0 2px; border-radius: 2px; }
+.checker-hits { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; font-size: .9rem; }
+.checker-hits li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 10px; border-bottom: 1px dashed var(--line); padding-bottom: 6px; }
+.checker-hits .bad { color: var(--warn); font-weight: 600; }
+.verdict { font-weight: 600; }
+.verdict.ok { color: var(--ok); }
+.verdict.bad { color: var(--warn); }
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 40px; }
+.facts div { display: grid; gap: 8px; align-content: start; }
+.facts .date { font: 600 .82rem var(--f-mono); color: var(--accent); }
+.facts ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: .93rem; display: grid; gap: 4px; }
+@media (max-width: 860px) { .facts { grid-template-columns: 1fr; } }
+.disclaimer { font-size: .85rem; color: var(--muted); margin-top: 24px; }
+
+/* ---------- марафон ---------- */
+.mar { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--surface); }
+.mar > div { padding: 22px; display: grid; gap: 10px; align-content: start; border-right: 1px solid var(--line); }
+.mar > div:last-child { border-right: 0; }
+.mar .days-range { font: 600 .78rem var(--f-mono); color: var(--muted); }
+.mar .live { font-size: .85rem; border-top: 1px dashed var(--line); padding-top: 10px; color: var(--muted); }
+.mar .live b { color: var(--accent); }
+.mar ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: .93rem; }
+@media (max-width: 860px) { .mar { grid-template-columns: 1fr; } .mar > div { border-right: 0; border-bottom: 1px solid var(--line); } .mar > div:last-child { border-bottom: 0; } }
+
+/* ---------- лидер ---------- */
+.leader { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
+@media (max-width: 860px) { .leader { grid-template-columns: 1fr; } }
+.flow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 8px; }
+.flow span { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; font-size: .9rem; }
+.flow i { font-style: normal; color: var(--muted); }
+.agenda { margin: 0; padding: 0; list-style: none; display: grid; gap: 0; }
+.agenda li { display: grid; grid-template-columns: 70px minmax(0, 1fr); gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.agenda .mono { color: var(--muted); font-size: .85rem; }
+.metrics { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+
+/* ---------- канал ---------- */
+.week-table td:first-child { font-family: var(--f-mono); font-weight: 600; width: 48px; }
+.week-table .hash { color: var(--accent); font-weight: 600; }
+.hashes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.hashes span { font: 600 .85rem var(--f-mono); color: var(--accent); background: var(--accent-soft); padding: 4px 10px; border-radius: 99px; }
+.channel { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 32px; }
+@media (max-width: 860px) { .channel { grid-template-columns: 1fr; } }
+.magnets { display: grid; gap: 12px; }
+.magnet { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; display: grid; gap: 6px; }
+.plan-word { font: 700 1.5rem var(--f-display); color: var(--done); letter-spacing: .06em; }
+
+/* ---------- подвал ---------- */
+footer { border-top: 1px solid var(--line); padding-block: 36px 48px; color: var(--muted); font-size: .88rem; }
+footer .wrap { display: grid; gap: 10px; }
+
+/* модальное подтверждение внутри страницы */
+.confirm { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; background: var(--warn-soft); border-radius: 8px; padding: 10px 14px; margin-top: 12px; font-size: .9rem; }
+.toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--paper); padding: 10px 18px; border-radius: 8px; font-size: .92rem; z-index: 20; max-width: calc(100% - 32px); }
+</style>
+</head>
+<body>
+
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>Система Лидера</a>
+    <nav class="nav" aria-label="Разделы">
+      <a href="#programma">Программа 30 дней</a>
+      <a href="#pro">Клуб PRO</a>
+      <a href="#pravila">Правила 2026</a>
+      <a href="#marafon">Марафон</a>
+      <a href="#lider">Лидерам</a>
+      <a href="#kanal">Канал</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">Сетевой бизнес · 2026 · Казахстан и СНГ</p>
+          <h1>Строим структуру <em>как проект</em></h1>
+          <p class="lead">Первые шаги новичка, продажи без спама, реклама по новым правилам, ИИ и управление командой. С этапами, задачами и цифрами, а не на одном энтузиазме.</p>
+          <div class="cta">
+            <a class="btn" href="#programma">Начать программу «30 дней»</a>
+            <a class="btn ghost" href="#pro">Клуб PRO</a>
+          </div>
+        </div>
+        <div class="quote">
+          Без «стань миллионером за месяц». Только то, что работает в 2026 году.
+          <small>Автор — топ-лидер сетевого бизнеса, таргетолог и проджект-менеджер</small>
+        </div>
+      </div>
+
+      <div class="strip" aria-label="Шкала программы 30 дней">
+        <div class="strip-head">
+          <span class="eyebrow">Программа «30 дней» · одно задание в день, 15–30 минут</span>
+          <span class="mono" id="stripLabel">0 из 30</span>
+        </div>
+        <div class="strip-cells" id="strip"></div>
+        <div class="strip-weeks">
+          <div><b>Старт</b>дни 1–7</div>
+          <div><b>Первые клиенты</b>дни 8–14</div>
+          <div><b>Первый партнёр</b>дни 15–21</div>
+          <div><b>Дупликация</b>дни 22–30</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ПРОБЛЕМА -->
+  <section class="block">
+    <div class="wrap">
+      <div class="block-head">
+        <p class="eyebrow">Почему это нужно</p>
+        <h2>Новички уходят не из-за лени</h2>
+      </div>
+      <div class="problems">
+        <div><span class="num">1–3</span><p><b>месяца</b> — за это время уходит большинство новичков. Они не понимают, что делать каждый день, получают отказы и остаются одни.</p></div>
+        <div><span class="num">«Привет, есть тема»</span><p>Шаблонные рассылки больше не работают. Люди узнают шаблон с первой строки, а ИИ-рассылки сделали всех одинаковыми.</p></div>
+        <div><span class="num">30.10</span><p>Новые условия рекламы Meta, маркировка БАДов DataMatrix с 10.10.2026, маркировка партнёрских постов. Правила стали строже.</p></div>
+        <div><span class="num">1 человек</span><p>Лидер тянет всё на себе: команда растёт, только пока лидер лично активен.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ТРИ ЧАСТИ -->
+  <section class="block">
+    <div class="wrap">
+      <div class="block-head">
+        <p class="eyebrow">Из чего состоит проект</p>
+        <h2>Три части одной системы</h2>
+      </div>
+      <div class="parts">
+        <article class="part">
+          <span class="tag">Бесплатно · вход</span>
+          <h3>Открытый канал</h3>
+          <ul><li>Рубрики для новичков, партнёров, клиентов и лидеров</li><li>Что изменилось в 2026 году</li><li>Эфир раз в месяц</li></ul>
+          <a href="#kanal">Ритм канала →</a>
+        </article>
+        <article class="part">
+          <span class="tag">Подписка · от 7 900 ₸</span>
+          <h3>Клуб «Система Лидера PRO»</h3>
+          <ul><li>Модули обучения и библиотека</li><li>Чат, эфиры, разборы диалогов</li><li>Новые ИИ-промпты каждую неделю</li></ul>
+          <a href="#pro">Тарифы →</a>
+        </article>
+        <article class="part">
+          <span class="tag">Наставник · каждый день</span>
+          <h3>Программа «30 дней»</h3>
+          <ul><li>Задание дня и отметка «Выполнено»</li><li>Напоминание вечером, если задание не отмечено</li><li>3 дня без отметок → сигнал наставнику</li></ul>
+          <a href="#programma">Открыть кабинет →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- КАБИНЕТ -->
+  <section class="block" id="programma">
+    <div class="wrap">
+      <div class="block-head">
+        <p class="eyebrow">Модуль 1 · Кабинет новичка</p>
+        <h2>Программа «30 дней»</h2>
+        <p class="lead">К 30-му дню: свой опыт с продуктом, 3–5 клиентов, 1 партнёр и оформленный профиль. Следующее задание открывается на следующий день после отметки.</p>
+      </div>
+
+      <div class="cab" id="cab">
+        <!-- онбординг -->
+        <div class="pane" id="onboarding">
+          <div class="onb">
+            <div class="onb-copy">
+              <h3 style="font-size:1.3rem;font-weight:700">С чего начать</h3>
+              <p>Заполни три поля, и программа стартует сразу. Первое задание откроется прямо сейчас.</p>
+              <ul>
+                <li>Одно задание в день на 15–30 минут</li>
+                <li>Прогресс «День N из 30» и отметка «Выполнено»</li>
+                <li>После 20:00 — напоминание, если задание не отмечено</li>
+                <li>3 дня без отметок — подсказка написать наставнику</li>
+                <li>«Мои контакты»: люди, статусы и напоминания через N дней</li>
+              </ul>
+              <p class="disclaimer" style="margin-top:4px">Данные хранятся только в этом браузере на этом устройстве. Их можно удалить кнопкой «Сбросить прогресс».</p>
+            </div>
+            <form class="stack" id="onbForm" novalidate>
+              <label class="f" for="fName">Как тебя зовут
+                <input type="text" id="fName" maxlength="60" autocomplete="given-name" placeholder="Имя">
+              </label>
+              <fieldset style="border:0;padding:0;margin:0;display:grid;gap:6px">
+                <legend style="font-weight:600;font-size:.9rem;margin-bottom:6px">Кто ты в бизнесе сейчас</legend>
+                <div class="roles">
+                  <label><input type="radio" name="role" id="rNewbie" value="newbie" checked><b>Новичок</b><span>0–3 месяца</span></label>
+                  <label><input type="radio" name="role" id="rPartner" value="partner"><b>Партнёр</b><span>активный, хочу расти</span></label>
+                  <label><input type="radio" name="role" id="rLeader" value="leader"><b>Лидер</b><span>есть своя структура</span></label>
+                </div>
+              </fieldset>
+              <label class="f" for="fGoal">Цель на 90 дней
+                <small>Про твои действия и результаты, а не про «гарантированный доход»</small>
+                <textarea id="fGoal" maxlength="300" placeholder="Например: свой опыт с продуктом, 3–5 постоянных клиентов и 1 партнёр"></textarea>
+              </label>
+              <label class="f" for="fMentor">Наставник <small>необязательно</small>
+                <input type="text" id="fMentor" maxlength="60" placeholder="Имя или @username в Telegram">
+              </label>
+              <label class="check" for="fConsent"><input type="checkbox" id="fConsent">Понимаю, что программа — про действия, а не про обещание дохода. Медицинских советов здесь нет.</label>
+              <p class="err" id="onbErr" hidden></p>
+              <div><button class="btn" type="submit">Начать программу</button></div>
+            </form>
+          </div>
+        </div>
+
+        <!-- рабочий кабинет -->
+        <div id="workspace" hidden>
+          <div class="cab-bar">
+            <div class="who"><b id="wName"></b><span id="wMeta"></span></div>
+            <div class="kpis">
+              <div class="kpi"><b id="kDay">1</b><span>день из 30</span></div>
+              <div class="kpi"><b id="kDone">0</b><span>выполнено</span></div>
+              <div class="kpi"><b id="kClients">0</b><span>клиентов</span></div>
+              <div class="kpi"><b id="kPartners">0</b><span>партнёров</span></div>
+            </div>
+          </div>
+          <div class="tabs" role="tablist">
+            <button class="tab" role="tab" id="tabTask" aria-selected="true" aria-controls="paneTask">Задание дня</button>
+            <button class="tab" role="tab" id="tabContacts" aria-selected="false" aria-controls="paneContacts">Мои контакты <span class="badge" id="dueBadge" hidden>0</span></button>
+            <button class="tab" role="tab" id="tabProfile" aria-selected="false" aria-controls="paneProfile">Профиль</button>
+          </div>
+
+          <div class="pane" id="paneTask" role="tabpanel">
+            <div id="banners"></div>
+            <div class="prog">
+              <article class="task" id="task"></article>
+              <nav class="days" id="days" aria-label="Все задания"></nav>
+            </div>
+          </div>
+
+          <div class="pane" id="paneContacts" role="tabpanel" hidden>
+            <p class="lead" style="font-size:.98rem;margin-bottom:16px">Храни только имя или ник — без телефонов и личных подробностей. Когда подойдёт дата, контакт подсветится: время написать, начав с заботы, а не с предложения.</p>
+            <form class="c-form" id="cForm" novalidate>
+              <label class="f" for="cName">Имя<input type="text" id="cName" maxlength="60" placeholder="Например: Айгерим, соседка"></label>
+              <label class="f" for="cStatus">Статус
+                <select id="cStatus">
+                  <option value="thinking">Думает</option>
+                  <option value="client">Клиент</option>
+                  <option value="partner">Партнёр</option>
+                  <option value="later">Не сейчас</option>
+                </select>
+              </label>
+              <label class="f" for="cRemind">Напомнить
+                <select id="cRemind">
+                  <option value="1">через 1 день</option>
+                  <option value="3" selected>через 3 дня</option>
+                  <option value="7">через 7 дней</option>
+                  <option value="14">через 14 дней</option>
+                  <option value="0">без напоминания</option>
+                </select>
+              </label>
+              <button class="btn" type="submit">Добавить</button>
+            </form>
+            <div class="summary-row" id="cSummary"></div>
+            <div class="table-scroll"><table id="cTable"></table></div>
+          </div>
+
+          <div class="pane" id="paneProfile" role="tabpanel" hidden>
+            <form class="stack" id="profForm" style="max-width:560px" novalidate>
+              <label class="f" for="pName">Имя<input type="text" id="pName" maxlength="60"></label>
+              <label class="f" for="pRole">Роль
+                <select id="pRole"><option value="newbie">Новичок</option><option value="partner">Партнёр</option><option value="leader">Лидер</option></select>
+              </label>
+              <label class="f" for="pGoal">Цель на 90 дней<textarea id="pGoal" maxlength="300"></textarea></label>
+              <label class="f" for="pMentor">Наставник<input type="text" id="pMentor" maxlength="60"></label>
+              <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" type="submit">Сохранить</button><button class="btn quiet" type="button" id="resetBtn">Сбросить прогресс</button></div>
+              <div id="resetConfirm" hidden></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRO -->
+  <section class="block" id="pro">
+    <div class="wrap">
+      <div class="block-head">
+        <p class="eyebrow">Закрытый клуб</p>
+        <h2>«Система Лидера PRO»</h2>
+        <p class="lead">Всё, что сетевику нужно в 2026 году, в одном месте: что делать каждый день, что говорить и чего не делать.</p>
+      </div>
+      <div class="tariffs">
+        <article class="tariff">
+          <h3>Старт</h3>
+          <p class="price mono">7 900 ₸ <small>/ мес</small></p>
+          <ul><li>Модули 1–4: программа «30 дней», живые диалоги, правила 2026, 10 ИИ-промптов</li><li>Бот-наставник «30 дней»</li><li>Общий чат клуба</li></ul>
+          <a class="btn ghost js-pay" href="#" data-plan="Старт">Подключить</a>
+        </article>
+        <article class="tariff featured">
+          <h3>Партнёр</h3>
+          <p class="price mono">14 900 ₸ <small>/ мес</small></p>
+          <ul><li>Всё из «Старт»</li><li>Марафон «21 день здоровых привычек» для своих клиентов</li><li>2 эфира в месяц</li></ul>
+          <a class="btn js-pay" href="#" data-plan="Партнёр">Подключить</a>
+        </article>
+        <article class="tariff">
+          <h3>Лидер</h3>
+          <p class="price mono">49 900 ₸ <small>/ мес</small></p>
+          <ul><li>Всё из «Партнёр»</li><li>Модуль 6 «Команда как проект»</li><li>Доступ для команды до 20 человек</li><li>Разбор вашей структуры</li></ul>
+          <a class="btn ghost js-pay" href="#" data-plan="Лидер">Подключить</a>
+        </article>
+      </div>
+      <p class="disclaimer">Для своей структуры клуб бесплатный или со скидкой. Цены стартовые и проверяются на первых продажах.</p>
+
+      <div class="topics" aria-label="Темы закрытой группы">
+        <div><b>Старт здесь</b><span>Как пользоваться клубом, ссылка на бота</span></div>
+        <div><b>Библиотека</b><span>Модули, видео, чек-листы</span></div>
+        <div><b>ИИ-промпты</b><span>Новые каждую неделю</span></div>
+        <div><b>Правила 2026</b><span>Новости Meta, законов, маркировки</span></div>
+        <div><b>Разборы</b><span>Участники присылают свои диалоги и посты</span></div>
+        <div><b>Победы</b><span>Продажи, партнёры, выпускники</span></div>
+        <div><b>Эфиры</b><span>Записи и расписание</span></div>
+        <div><b>Лидеры</b><span>Только для тарифа «Лидер»</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ПРАВИЛА -->
+  <section class="block" id="pravila">
+    <div class="wrap">
+      <div class="block-head">
+        <p class="eyebrow">Модуль 3</p>
+        <h2>Правила 2026: за что блокируют и штрафуют</h2>
+      </div>
+      <div class="rules">
+        <div>
+          <div class="table-scroll">
+            <table class="words">
+              <thead><tr><th>Нельзя</th><th>Можно</th></tr></thead>
+              <tbody>
+                <tr><td>«лечит», «вылечило», «избавляет от болезни»</td><td>«мне нравится», «стало частью режима»</td></tr>
+                <tr><td>«лекарство», «заменяет таблетки»</td><td>«продукт для ежедневного рациона»</td></tr>
+                <tr><td>«детокс», «выводит токсины и шлаки»</td><td>«помогает выстроить привычку пить воду»</td></tr>
+                <tr><td>«гарантированный доход», «пассивный доход без усилий»</td><td>«результат зависит от твоих действий»</td></tr>
+                <tr><td>фото и истории «до/после»</td><td>история привычек: «было — поворот — стало»</td></tr>
+                <tr><td>«похудела на 10 кг за месяц»</td><td>«питаюсь без жёстких диет, мне так удобнее»</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="checker">
+          <h3 style="font-weight:700">Проверка текста</h3>
+          <p style="color:var(--muted);font-size:.92rem">Вставь пост, сторис или текст рекламы. Рискованные слова подсветятся, рядом будет безопасная замена.</p>
+          <label class="f" for="chkInput" style="font-weight:600">Текст
+            <textarea id="chkInput" rows="5">Этот коктейль реально лечит! Детокс за 7 дней, а ещё гарантированный доход для партнёров. Пиши + в директ.</textarea>
+          </label>
+          <p class="verdict" id="chkVerdict"></p>
+          <div class="checker-out" id="chkOut" aria-live="polite"></div>
+          <ul class="checker-hits" id="chkHits"></ul>
+        </div>
+      </div>
+
+      <div class="facts">
+        <div>
+          <span class="date">с 30.10.2026</span>
+          <h3>Реклама Meta</h3>
+          <ul>
+            <li>За ИИ-креативы отвечает рекламодатель</li>
+            <li>Водяные знаки ИИ удалять нельзя</li>
+            <li>Рекламодатель отвечает за своих клиентов</li>
+            <li>Meta проверяет лендинги</li>
+            <li>Реклама крутится ещё 24 часа после отмены</li>
+            <li>Нельзя называть себя «партнёром Meta»</li>
+          </ul>
+        </div>
+        <div>
+          <span class="date">с 10.10.2026</span>
+          <h3>Маркировка БАДов</h3>
+          <ul>
+            <li>БАДы в Казахстане маркируются кодом DataMatrix</li>
+            <li>Уточните у компании, как это касается продукта, который вы продаёте</li>
+          </ul>
+        </div>
+        <div>
+          <span class="date">уже сейчас</span>
+          <h3>Партнёрские посты</h3>
+          <ul>
+            <li>Помечайте: «реклама» или «партнёрский материал»</li>
+            <li>Таргет через рекламный кабинет маркирует площадка</li>
+            <li>Стоп-слова обязательны для постов, материалов и рекламы</li>
+          </ul>
+        </div>
+      </div>
+      <p class="disclaimer">Это не юридическая консультация. Перед запуском материалы стоит показать юристу.</p>
+    </div>
+  </section>
+
+  <!-- МАРАФОН -->
+  <section class="block" id="marafon">
+    <div class="wrap">
+      <div class="block-head">
+        <p class="eyebrow">Модуль 5 · для клиентов, проводят партнёры</p>
+        <h2>Марафон «21 день здоровых привычек»</h2>
+        <p class="lead">Одно маленькое действие в день, без жёстких правил. После марафона партнёр лично пишет каждому участнику.</p>
+      </div>
+      <div class="mar">
+        <div>
+          <span class="days-range">Неделя 1 · дни 1–7</span>
+          <h3 style="font-weight:700">Вода и сон</h3>
+          <ul><li>Стакан воды после пробуждения</li><li>Одинаковое время отбоя</li><li>Вечер без экрана за 30 минут до сна</li></ul>
+          <p class="live">Эфир на <b>7-й день</b></p>
+        </div>
+        <div>
+          <span class="days-range">Неделя 2 · дни 8–14</span>
+          <h3 style="font-weight:700">Питание без диет</h3>
+          <ul><li>Овощи в каждый приём пищи</li><li>Завтрак, а не перекус на бегу</li><li>Осознанный перекус</li></ul>
+          <p class="live">Эфир на <b>14-й день</b></p>
+        </div>
+        <div>
+          <span class="days-range">Неделя 3 · дни 15–21</span>
+          <h3 style="font-weight:700">Движение и энергия</h3>
+          <ul><li>Прогулка 20 минут</li><li>Разминка в перерыве</li><li>Итоги: какие привычки остаются</li></ul>
+          <p class="live">Эфир на <b>21-й день</b> и рассказ о возможности стать партнёром</p>
+        </div>
+      </div>
+      <p class="disclaimer">Не является медицинской программой. При вопросах о здоровье обратитесь к врачу.</p>
+    </div>
+  </section>
+
+  <!-- ЛИДЕРАМ -->
+  <section class="block" id="lider">
+    <div class="wrap">
+      <div class="block-head">
+        <p class="eyebrow">Модуль 6 · тариф «Лидер»</p>
+        <h2>Команда как проект</h2>
+        <p class="lead">Одна программа для всех. У каждого новичка есть наставник, у наставника не больше 5 новичков. Лидер работает с наставниками.</p>
+      </div>
+      <div class="leader">
+        <div style="display:grid;gap:22px;align-content:start">
+          <div>
+            <h3 style="font-weight:700">Если человек пропал</h3>
+            <div class="flow"><span>3 дня без отметок</span><i>→</i><span>сигнал наставнику</span><i>→</i><span>«Что помешало? Давай упростим»</span></div>
+          </div>
+          <div>
+            <h3 style="font-weight:700;margin-bottom:8px">Что считаем</h3>
+            <ul class="metrics">
+              <li>Доля активных через 30 дней</li>
+              <li>Выполнение заданий</li>
+              <li>Клиенты и повторные заказы</li>
+              <li>Новые партнёры в месяц</li>
+              <li>Число наставников</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <h3 style="font-weight:700;margin-bottom:8px">Еженедельная планёрка, 30 минут</h3>
+          <ol class="agenda">
+            <li><span class="mono">0–5′</span><span>Победы недели</span></li>
+            <li><span class="mono">5–12′</span><span>Цифры из бота: кто на каком дне, кто без отметок</span></li>
+            <li><span class="mono">12–22′</span><span>Одна тема обучения</span></li>
+            <li><span class="mono">22–30′</span><span>Задачи с именами и сроками</span></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- КАНАЛ -->
+  <section class="block" id="kanal">
+    <div class="wrap">
+      <div class="block-head">
+        <p class="eyebrow">Открытый канал · бесплатно</p>
+        <h2>Ритм на неделю</h2>
+      </div>
+      <div class="channel">
+        <div>
+          <div class="table-scroll">
+            <table class="week-table">
+              <thead><tr><th>День</th><th>Рубрика</th><th>Формат</th></tr></thead>
+              <tbody>
+                <tr><td>Пн</td><td><span class="hash">#новичку</span> — задание недели</td><td>Пост и чек-лист</td></tr>
+                <tr><td>Вт</td><td><span class="hash">#партнёру</span> — живые диалоги или реклама</td><td>Пост или карточки</td></tr>
+                <tr><td>Ср</td><td><span class="hash">#клиенту</span> — привычка недели</td><td>Короткое видео</td></tr>
+                <tr><td>Чт</td><td><span class="hash">#2026</span> — что изменилось: законы, Meta, ИИ</td><td>Пост</td></tr>
+                <tr><td>Пт</td><td><span class="hash">#лидеру</span> — разбор ошибки</td><td>Голосовое или видео</td></tr>
+                <tr><td>Сб</td><td>История из команды</td><td>Отзыв с согласия</td></tr>
+                <tr><td>Вс</td><td>Опрос или вопрос-ответ</td><td>Интерактив</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="disclaimer">Плюс один эфир в месяц.</p>
+          <div class="hashes"><span>#новичку</span><span>#партнёру</span><span>#клиенту</span><span>#лидеру</span><span>#2026</span></div>
+        </div>
+        <div class="magnets">
+          <div class="magnet">
+            <span class="eyebrow">Напиши автору слово</span>
+            <span class="plan-word">ПЛАН</span>
+            <p style="font-size:.93rem;color:var(--muted)">Ты пишешь первым, и начинается живой диалог. В ответ придёт один из материалов:</p>
+          </div>
+          <div class="magnet"><b>Чек-лист «7 причин, почему новички уходят в первый месяц»</b></div>
+          <div class="magnet"><b>«Реклама в Meta по новым правилам с 30.10.2026: 10 ошибок, за которые блокируют»</b></div>
+          <div class="magnet"><b>День 1 программы «30 дней»</b><span style="color:var(--muted);font-size:.9rem">Пробный доступ к боту-наставнику</span></div>
+          <a class="btn js-channel" href="#">Перейти в канал</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><b style="color:var(--ink)">Система Лидера</b> · Telegram-экосистема для людей в сетевом бизнесе</p>
+    <p>Мы не обещаем доход: результат в сетевом бизнесе зависит от действий. Материалы о продуктах не являются медицинскими рекомендациями. Раздел о правилах не является юридической консультацией.</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+/* Ссылки проекта: заполните, когда появятся канал и приём оплат */
+const CONFIG = {
+  channelUrl: "",   // https://t.me/...
+  payUrl: ""        // страница оплаты или Telegram автора
+};
+
+const PROGRAM = {
+  "weeks": {
+    "1": "Старт",
+    "2": "Первые клиенты",
+    "3": "Первый партнёр",
+    "4": "Дупликация"
+  },
+  "days": [
+    {
+      "day": 1, "week": 1, "video": "",
+      "title": "Цель на 90 дней",
+      "text": "Ответь письменно на три вопроса:\n1) Что должно измениться в моей жизни через 90 дней?\n2) Сколько часов в неделю у меня реально есть на бизнес?\n3) По каким цифрам я пойму, что 90 дней прошли не зря? (свой опыт с продуктом, клиенты, партнёры)\n\nСведи ответы в одно предложение — это твоя цель. Отправь её наставнику.\n\nВажно: цель — про твои действия и результаты. Доход в сетевом бизнесе не гарантирован и зависит от работы.",
+      "result": "цель на 90 дней записана и отправлена наставнику."
+    },
+    {
+      "day": 2, "week": 1, "video": "",
+      "title": "Маркетинг-план без тумана",
+      "text": "Посмотри видео о маркетинг-плане компании или попроси наставника объяснить его за 15 минут.\n\nВыпиши для себя:\n• за что начисляются баллы и вознаграждение;\n• что такое личный объём и объём группы;\n• какие условия у первых квалификаций.\n\nЗапиши 3 вопроса, которые остались непонятными, и задай их наставнику.\n\nКогда будешь рассказывать о бизнесе другим, говори честно: доход зависит от действий и не гарантирован.",
+      "result": "ты можешь своими словами объяснить, за что в компании платят вознаграждение."
+    },
+    {
+      "day": 3, "week": 1, "video": "",
+      "title": "Свой опыт с продуктом",
+      "text": "Выбери 1–3 продукта для личного использования.\n\nЗаведи «дневник продукта»: дата и 1–2 строки о том, что заметно — вкус, удобство, ритуал, как продукт встроился в день.\n\nПиши без медицинских формулировок: не «вылечило» и «избавило», а «мне нравится», «стало привычкой», «удобно брать с собой».\n\nЧерез месяц этот дневник станет твоей честной историей — своей, а не из чужих отзывов.",
+      "result": "выбраны продукты и сделана первая запись в дневнике."
+    },
+    {
+      "day": 4, "week": 1, "video": "",
+      "title": "Список 100 знакомых",
+      "text": "Открой телефонную книгу, мессенджеры и соцсети. Выпиши 100 имён — пока не решая, «подойдёт или нет».\n\nПодсказки: родственники, однокурсники, коллеги (нынешние и бывшие), соседи, родители из садика и школы, спорт, мастера (парикмахер, маникюр), подписчики.\n\nНапротив каждого имени поставь метку:\nК — может быть интересен продукт;\nП — активный человек, ищет возможности;\n? — пока не знаю.\n\n10–20 самых тёплых контактов добавь в бот: кнопка «📇 Мои контакты».",
+      "result": "список из 100 имён с метками, тёплые контакты — в боте."
+    },
+    {
+      "day": 5, "week": 1, "video": "",
+      "title": "Профиль, которому доверяют",
+      "text": "Оформи профиль в Instagram или Telegram так, чтобы сразу было понятно, кто ты.\n\nЧек-лист:\n• живое фото лица;\n• имя;\n• 1–2 строки о себе: кто ты и чем делишься (например: «мама двоих детей · пишу о простых здоровых привычках»);\n• закреплённые сторис: «Обо мне», «Продукт», «Отзывы» (только с согласия людей).\n\nУбери, если есть: «доход от 500 000 ₸», «лечу», «пиши + в директ», чужие фото «до/после».\n\nПокажи профиль наставнику.",
+      "result": "профиль оформлен и проверен наставником."
+    },
+    {
+      "day": 6, "week": 1, "video": "",
+      "title": "Первый пост",
+      "text": "Напиши пост-знакомство по схеме:\nкто я → почему сейчас начинаю новое → что буду показывать в блоге → вопрос к читателям.\n\nМожно попросить ИИ помочь (промпт «Пост» из модуля 4), но перепиши текст своими словами — шаблон люди узнают с первой строки.\n\nНе пиши о доходе и не обещай результатов от продукта. Если пост рекламный или с партнёрской ссылкой — пометь его: «реклама» или «партнёрский материал».",
+      "result": "первый пост опубликован."
+    },
+    {
+      "day": 7, "week": 1, "video": "",
+      "title": "Итоги недели 1",
+      "text": "Ответь на вопросы и отправь наставнику:\n1) Что получилось на этой неделе?\n2) Что было трудно?\n3) Сколько минут в день реально уходит на задания?\n4) Что упростить на следующей неделе?\n\nСделай запись в дневнике продукта.\n\nОтдохни — завтра начинается неделя «Первые клиенты».",
+      "result": "итоги недели отправлены наставнику."
+    },
+    {
+      "day": 8, "week": 2, "video": "",
+      "title": "Стоп-слова",
+      "text": "Есть слова, за которые блокируют рекламу и штрафуют.\n\nНельзя: «лечит», «вылечило», «лекарство», «избавляет от болезни», «детокс от токсинов», «гарантированный доход», «пассивный доход без усилий», фото «до/после».\n\nМожно: «мне нравится», «помогает выстроить привычку», «часть моего режима», «результат зависит от твоих действий».\n\nЗадание: перечитай профиль и первый пост, найди рискованные слова и замени их. Полная таблица — в модуле 3 «Правила 2026».",
+      "result": "профиль и пост проверены на стоп-слова."
+    },
+    {
+      "day": 9, "week": 2, "video": "",
+      "title": "Конструктор живого сообщения",
+      "text": "«Привет, есть тема» больше не работает. Формула живого сообщения:\nличная деталь + искренний вопрос + никакого предложения в первых 2–3 сообщениях.\n\nПример: «Ого, у тебя фото с Бурабая! Давно хочу туда — где останавливались?»\n\nЗадание: напиши 3 первых сообщения для людей из своего списка. Пока не отправляй — покажи наставнику.\n\nСовет: голосовое сообщение звучит живее, чем текст.",
+      "result": "3 живых сообщения готовы и проверены наставником."
+    },
+    {
+      "day": 10, "week": 2, "video": "",
+      "title": "10 живых сообщений",
+      "text": "Отправь 10 живых сообщений людям из списка. Цель — возобновить общение, а не продать.\n\nБез ссылок и предложений. Если человек сам спросит, чем ты занимаешься, — ответь коротко и спроси разрешения: «Хочешь, расскажу, что нравится мне?»\n\nКаждого добавь в «📇 Мои контакты» и поставь напоминание через 3 дня.",
+      "result": "10 сообщений отправлено, люди добавлены в контакты."
+    },
+    {
+      "day": 11, "week": 2, "video": "",
+      "title": "Тренировка диалога с ИИ",
+      "text": "Открой ChatGPT или другой ИИ-ассистент и отправь промпт:\n\n«Сыграй роль моей скептичной подруги. Я расскажу о продукте, которым пользуюсь, а ты задавай неудобные вопросы и возражай. После 5 реплик выйди из роли и разбери: где мои ответы звучали как шаблон или давили, и как сказать проще и честнее. Не используй медицинские обещания и обещания дохода».\n\nПотренируй три вопроса вместо «отработки возражений»:\n• «Что именно смущает?»\n• «Если бы этого не было, было бы интересно?»\n• «Что тебе важно узнать, чтобы решить?»\n\nПройди диалог дважды и запиши 3 фразы, которые получились живыми.",
+      "result": "2 тренировки и 3 свои живые фразы."
+    },
+    {
+      "day": 12, "week": 2, "video": "",
+      "title": "Приглашение на марафон",
+      "text": "Пригласи 5–10 человек в марафон «21 день здоровых привычек». Даты и условия уточни у наставника.\n\nПример приглашения:\n«Запускаем 21 день простых привычек: вода, сон, питание без диет, движение. Без жёстких правил — одно маленькое действие в день. Хочешь со мной?»\n\nОбязательно говори прямо: марафон не является медицинской программой, с вопросами о здоровье — к врачу.",
+      "result": "5–10 приглашений отправлено."
+    },
+    {
+      "day": 13, "week": 2, "video": "",
+      "title": "Первый заказ",
+      "text": "Если кто-то из твоих диалогов заинтересовался продуктом:\n1) спроси, что человеку важно;\n2) предложи 1–2 продукта под задачу образа жизни (не под болезнь);\n3) оформите заказ вместе — наставник подскажет;\n4) договорись, когда спросишь о впечатлениях.\n\nОтметь у контакта статус «🛒 Клиент».\n\nЕсли клиента пока нет — это нормально. Продолжи диалоги и разбери с наставником, на каком шаге разговоры останавливаются.",
+      "result": "первый заказ или разбор диалогов с наставником."
+    },
+    {
+      "day": 14, "week": 2, "video": "",
+      "title": "Итоги недели 2",
+      "text": "Посчитай и отправь наставнику:\n• сколько сообщений отправлено;\n• сколько ответов получено;\n• сколько живых диалогов идёт;\n• сколько заказов;\n• сколько человек приглашено на марафон.\n\nДобавь один вывод: что сработало лучше всего?",
+      "result": "цифры недели и один вывод у наставника."
+    },
+    {
+      "day": 15, "week": 3, "video": "",
+      "title": "Пусть пишут первыми: слово ПЛАН",
+      "text": "Напиши пост о том, что изменилось за две недели: какие привычки появились, чему удалось научиться, что было непросто. Без обещаний дохода и медицинских эффектов.\n\nЗаверши призывом: «Если тоже хочешь попробовать что-то новое — напиши мне слово ПЛАН, расскажу, с чего начинаю я».\n\nТак человек пишет первым — и начинается живой диалог. Каждого, кто написал, добавь в «📇 Мои контакты».",
+      "result": "пост с призывом «напиши ПЛАН» опубликован."
+    },
+    {
+      "day": 16, "week": 3, "video": "",
+      "title": "10 кандидатов",
+      "text": "Выбери из списка 10 человек, которым может быть интересна возможность, а не только продукт: ищут подработку, любят общаться, активны в соцсетях, недавно сменили работу или ушли в декрет.\n\nНапиши каждому живое сообщение. Не предлагай сразу — спроси, как дела с тем, о чём человек сам рассказывал.\n\nДобавь всех в контакты с напоминанием через 3 дня.",
+      "result": "10 кандидатов в контактах, диалоги начаты."
+    },
+    {
+      "day": 17, "week": 3, "video": "",
+      "title": "Презентация на троих",
+      "text": "Договорись о встрече втроём (онлайн или вживую): ты, кандидат и наставник.\n\nТвоя роль: познакомить и рассказать свою историю за 2–3 минуты. Наставник рассказывает о бизнесе.\n\nПодготовь:\n• свою короткую историю;\n• 3 вопроса кандидату: что сейчас важно, сколько времени есть, что смущает.\n\nГовори честно: «Это не для всех» — и это нормально.\n\nЕсли встреча пока не назначена — договорись о дате и поставь напоминание.",
+      "result": "встреча проведена или назначена."
+    },
+    {
+      "day": 18, "week": 3, "video": "",
+      "title": "История «было — поворот — стало»",
+      "text": "Напиши пост по формуле:\nбыло — что было до (честно);\nповорот — момент решения;\nстало — что изменилось в привычках, навыках, окружении.\n\nБез цифр дохода, без фото тела «до/после», без медицинских эффектов.\n\nМожно взять промпт «История» из модуля 4 и переписать результат своими словами.",
+      "result": "пост-история опубликован."
+    },
+    {
+      "day": 19, "week": 3, "video": "",
+      "title": "История в коротком видео",
+      "text": "Запиши короткое видео (Reels, Shorts или сторис, 30–60 секунд) с той же историей.\n\nСтруктура:\n• крючок в первые 3 секунды;\n• история;\n• вопрос к зрителю.\n\nСценарий можно подготовить с ИИ (промпт «Сценарий Reels» из модуля 4). Не идеально, а живо.",
+      "result": "видео опубликовано."
+    },
+    {
+      "day": 20, "week": 3, "video": "",
+      "title": "Касание через 3 дня",
+      "text": "Вернись к людям, с которыми был разговор или встреча 3 дня назад — бот уже напомнил о них утром.\n\nНе «ну что, решение есть?», а забота: поделись полезным, спроси впечатления, ответь на вопросы.\n\nЕсли звучат сомнения — используй три вопроса:\n• «Что именно смущает?»\n• «Если бы этого не было, было бы интересно?»\n• «Что тебе важно узнать, чтобы решить?»\n\nОбнови статусы в «📇 Мои контакты».",
+      "result": "касания сделаны, статусы обновлены."
+    },
+    {
+      "day": 21, "week": 3, "video": "",
+      "title": "Итоги недели 3",
+      "text": "Посчитай и отправь наставнику:\n• сколько постов и видео вышло;\n• сколько человек написали «ПЛАН»;\n• сколько встреч проведено;\n• сколько кандидатов в процессе.\n\nВывод: какой формат приводит людей лучше всего — пост, видео или личное сообщение?",
+      "result": "итоги недели у наставника."
+    },
+    {
+      "day": 22, "week": 4, "video": "",
+      "title": "Регистрация партнёра",
+      "text": "Если кто-то из кандидатов готов — помоги зарегистрироваться по правилам компании, вместе с наставником.\n\nЕсли пока никто не готов — продолжи диалоги с кандидатами. Это нормальный темп: первый партнёр часто появляется во втором месяце.\n\nЦель недели — понять, как ты будешь вести своего новичка.",
+      "result": "партнёр зарегистрирован или диалоги с кандидатами продолжаются."
+    },
+    {
+      "day": 23, "week": 4, "video": "",
+      "title": "Запуск партнёра по программе",
+      "text": "Отправь новому партнёру свою ссылку-приглашение (кнопка «🔗 Пригласить»). По ней человек сразу попадёт в твою команду в боте.\n\nПроведи первую встречу на 20 минут: объясни, как устроены задания, договоритесь, когда созваниваться.\n\nПрогресс партнёра теперь виден в «👥 Моя команда». Если 3 дня нет отметок — бот пришлёт тебе сигнал.\n\nЕсли партнёра пока нет — потренируйся объяснять программу наставнику.",
+      "result": "партнёр в программе или тренировка проведена."
+    },
+    {
+      "day": 24, "week": 4, "video": "",
+      "title": "Обратная связь от клиентов",
+      "text": "Спроси 3–5 клиентов или участников марафона:\n• что понравилось;\n• что было неудобно;\n• как продукт встроился в их день.\n\nПопроси разрешения использовать отзыв в соцсетях.\n\nЕсли в отзыве есть медицинские формулировки («вылечило», «прошло») — не публикуй его.",
+      "result": "3–5 отзывов собрано, есть согласие на публикацию."
+    },
+    {
+      "day": 25, "week": 4, "video": "",
+      "title": "Забота о клиенте",
+      "text": "Клиенту — заботу, а не напоминание о покупке.\n\nСделай 3–5 касаний: полезный совет по использованию, вопрос о впечатлениях, поддержка или поздравление.\n\nПоставь в «📇 Мои контакты» напоминания на дату, когда продукт может закончиться: так ты напишешь вовремя и без навязчивости.",
+      "result": "касания заботы сделаны, напоминания стоят."
+    },
+    {
+      "day": 26, "week": 4, "video": "",
+      "title": "Пост о первом месяце",
+      "text": "Напиши пост: что получилось за месяц, чему удалось научиться, что было сложно и что дальше.\n\nЦифры действий — можно и нужно: сколько сообщений, встреч, клиентов. Цифры дохода — нет.\n\nПроверь текст на стоп-слова перед публикацией.",
+      "result": "пост о первом месяце опубликован."
+    },
+    {
+      "day": 27, "week": 4, "video": "",
+      "title": "Видео о первом месяце",
+      "text": "Запиши короткое видео (30–60 секунд) о первом месяце: одна главная мысль, один момент, который запомнился, и вопрос к зрителю.\n\nСнимай как есть — живое видео вызывает больше доверия, чем идеальное.",
+      "result": "видео опубликовано."
+    },
+    {
+      "day": 28, "week": 4, "video": "",
+      "title": "Цифры месяца",
+      "text": "Заполни таблицу месяца:\n• клиентов;\n• повторных заказов;\n• партнёров;\n• отправленных сообщений;\n• проведённых встреч;\n• постов и видео;\n• выполненных заданий (смотри «📈 Мой прогресс»).\n\nСравни с целью, которую ты записал(а) в день 1. Что получилось лучше, чем ожидалось? Где отставание?",
+      "result": "цифры месяца посчитаны и сравнены с целью."
+    },
+    {
+      "day": 29, "week": 4, "video": "",
+      "title": "План на второй месяц",
+      "text": "На основе цифр составь план на второй месяц:\n• 1 главная цель;\n• 3 действия, которые ты делаешь каждую неделю;\n• что убрать (не работает или отнимает силы);\n• что усилить.\n\nСогласуй план с наставником.",
+      "result": "план на второй месяц согласован с наставником."
+    },
+    {
+      "day": 30, "week": 4, "video": "",
+      "title": "Выпускная встреча",
+      "text": "Проведи встречу с наставником или с группой выпускников:\n• твоя история за 30 дней;\n• цифры месяца;\n• план на второй месяц.\n\nОтметь это задание — и получишь статус «Выпускник». Дальше можно стать наставником и вести своих новичков по этой же программе.",
+      "result": "статус «Выпускник» 🎓"
+    }
+  ]
+};
+const TOTAL = 30;
+const STORE_KEY = "sistema-lidera-30";
+const ROLE_NAMES = { newbie: "Новичок", partner: "Партнёр", leader: "Лидер" };
+const STATUS_NAMES = { thinking: "Думает", client: "Клиент", partner: "Партнёр", later: "Не сейчас" };
+const REMINDER_HOUR = 20;
+const INACTIVE_DAYS = 3;
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+/* ---------- даты ---------- */
+const isoDay = (d = new Date()) => {
+  const z = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
+  return z.toISOString().slice(0, 10);
+};
+const addDays = (iso, n) => { const d = new Date(iso + "T12:00:00"); d.setDate(d.getDate() + n); return isoDay(d); };
+const daysBetween = (a, b) => Math.round((new Date(b + "T12:00:00") - new Date(a + "T12:00:00")) / 86400000);
+const fmtDate = (iso) => { const [y, m, d] = iso.split("-"); return `${d}.${m}`; };
+
+/* ---------- хранилище ---------- */
+function load() {
+  try { const raw = localStorage.getItem(STORE_KEY); return raw ? JSON.parse(raw) : null; } catch (e) { return null; }
+}
+let state = load();
+let memoryOnly = false;
+function save() {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+  catch (e) { if (!memoryOnly) { memoryOnly = true; toast("Браузер не даёт сохранить данные: прогресс пропадёт после закрытия страницы."); } }
+}
+
+/* ---------- логика программы ---------- */
+const doneCount = () => state ? Object.keys(state.done).length : 0;
+const currentDay = () => { for (let d = 1; d <= TOTAL; d++) if (!state.done[d]) return d; return null; };
+const lastActivity = () => {
+  const dates = Object.values(state.done);
+  return dates.length ? dates.sort().at(-1) : state.startedAt;
+};
+const doneToday = () => Object.values(state.done).includes(isoDay());
+/* Одно задание в день: следующее открывается на следующий день после отметки */
+function canMark(day) {
+  if (day !== currentDay()) return false;
+  if (day === 1) return true;
+  return state.done[day - 1] !== isoDay();
+}
+
+let selectedDay = null;
+let activeTab = "tabTask";
+
+/* ---------- toast ---------- */
+let toastTimer;
+function toast(text) {
+  const t = $("toast"); t.textContent = text; t.hidden = false;
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 3200);
+}
+
+/* ---------- шкала в hero ---------- */
+function renderStrip() {
+  const cur = state ? currentDay() : 1;
+  const cells = [];
+  for (let d = 1; d <= TOTAL; d++) {
+    const cls = state && state.done[d] ? "done" : (d === cur ? "now" : "");
+    cells.push(`<span class="${cls}" title="День ${d}">${d}</span>`);
+  }
+  $("strip").innerHTML = cells.join("");
+  $("stripLabel").textContent = state ? `${doneCount()} из ${TOTAL}` : "старт сегодня";
+}
+
+/* ---------- кабинет ---------- */
+function render() {
+  renderStrip();
+  if (!state) { $("onboarding").hidden = false; $("workspace").hidden = true; return; }
+  $("onboarding").hidden = true; $("workspace").hidden = false;
+
+  const p = state.profile;
+  $("wName").textContent = p.name;
+  $("wMeta").textContent = [ROLE_NAMES[p.role], p.mentor ? `наставник: ${p.mentor}` : "без наставника", p.goal ? `цель: ${p.goal}` : ""].filter(Boolean).join(" · ");
+  const cur = currentDay();
+  $("kDay").textContent = cur ?? TOTAL;
+  $("kDone").textContent = doneCount();
+  $("kClients").textContent = state.contacts.filter((c) => c.status === "client").length;
+  $("kPartners").textContent = state.contacts.filter((c) => c.status === "partner").length;
+
+  const due = dueContacts().length;
+  $("dueBadge").hidden = due === 0; $("dueBadge").textContent = due;
+
+  renderBanners();
+  renderTask();
+  renderDays();
+  renderContacts();
+  renderProfile();
+}
+
+function dueContacts() {
+  const today = isoDay();
+  return state.contacts.filter((c) => c.remindOn && !c.reminded && c.remindOn <= today);
+}
+
+function renderBanners() {
+  const out = [];
+  const cur = currentDay();
+  if (!cur) {
+    out.push(`<div class="banner good"><span>🎓</span><span><b>Программа пройдена, статус «Выпускник».</b> Следующий шаг: стать наставником и вести 1–5 новичков по этой же программе.</span></div>`);
+  } else {
+    const idle = daysBetween(lastActivity(), isoDay());
+    if (idle >= INACTIVE_DAYS) {
+      out.push(`<div class="banner warn"><span>⚠️</span><span><b>${idle} дн. без отметок.</b> Это нормально, так бывает. Напиши наставнику${state.profile.mentor ? " (" + esc(state.profile.mentor) + ")" : ""}: «Что помешало? Давай упростим», и сделайте вместе минимальную версию задания.</span></div>`);
+    } else if (new Date().getHours() >= REMINDER_HOUR && !doneToday() && canMark(cur)) {
+      out.push(`<div class="banner info"><span>🌙</span><span>Задание дня ${cur} ещё не отмечено. Даже 10 минут лучше, чем ничего.</span></div>`);
+    }
+  }
+  const due = dueContacts();
+  if (due.length) {
+    out.push(`<div class="banner info"><span>🔔</span><span>Пора напомнить о себе: ${due.map((c) => "<b>" + esc(c.name) + "</b>").join(", ")}. Начни с заботы, а не с предложения.</span></div>`);
+  }
+  $("banners").innerHTML = out.join("");
+}
+
+function renderTask() {
+  const cur = currentDay();
+  const day = selectedDay ?? cur ?? TOTAL;
+  const t = PROGRAM.days.find((x) => x.day === day);
+  const isDone = !!state.done[day];
+  const isNow = day === cur;
+  let status = isDone ? `<span class="pill done">выполнено ${fmtDate(state.done[day])}</span>` : (isNow ? `<span class="pill now">задание дня</span>` : `<span class="pill">впереди</span>`);
+
+  let actions = "";
+  if (isNow) {
+    if (canMark(day)) {
+      actions = `<button class="btn" id="doneBtn" type="button">✓ Выполнено</button><span class="note">≈ 15–30 минут</span>`;
+    } else {
+      actions = `<button class="btn" type="button" disabled>✓ Выполнено</button><span class="note">Сегодняшнее задание уже отмечено. Это задание откроется завтра.</span>`;
+    }
+  } else if (!isDone && cur) {
+    actions = `<button class="btn quiet small" type="button" id="toCurrent">← К заданию дня ${cur}</button>`;
+  }
+
+  $("task").innerHTML = `
+    <div class="task-meta"><span class="eyebrow">День ${day} из ${TOTAL} · неделя ${t.week}: ${esc(PROGRAM.weeks[t.week])}</span>${status}</div>
+    <h3>${esc(t.title)}</h3>
+    <p class="task-text">${esc(t.text)}</p>
+    <p class="task-result"><b>Результат:</b> ${esc(t.result)}</p>
+    ${t.video ? `<p><a href="${esc(t.video)}" target="_blank" rel="noopener">▶ Видео к заданию</a></p>` : ""}
+    <div class="task-actions">${actions}</div>`;
+
+  const doneBtn = $("doneBtn");
+  if (doneBtn) doneBtn.addEventListener("click", () => markDone(day));
+  const back = $("toCurrent");
+  if (back) back.addEventListener("click", () => { selectedDay = null; render(); });
+}
+
+function renderDays() {
+  const cur = currentDay();
+  const sel = selectedDay ?? cur ?? TOTAL;
+  const weeks = [1, 2, 3, 4].map((w) => {
+    const items = PROGRAM.days.filter((d) => d.week === w).map((d) => {
+      const cls = ["day-btn", state.done[d.day] ? "is-done" : "", d.day === cur ? "is-now" : "", d.day === sel ? "sel" : ""].join(" ");
+      return `<li><button type="button" class="${cls}" data-day="${d.day}"><span class="d">${String(d.day).padStart(2, "0")}</span><span class="t">${esc(d.title)}</span><span class="s" aria-hidden="true"></span></button></li>`;
+    }).join("");
+    return `<div class="week"><h4>Неделя ${w} · ${esc(PROGRAM.weeks[w])}</h4><ol>${items}</ol></div>`;
+  });
+  $("days").innerHTML = weeks.join("");
+  $("days").querySelectorAll("[data-day]").forEach((b) => b.addEventListener("click", () => {
+    selectedDay = Number(b.dataset.day); renderTask(); renderDays();
+    if (window.matchMedia("(max-width: 860px)").matches) $("task").scrollIntoView({ block: "start" });
+  }));
+}
+
+function markDone(day) {
+  if (!canMark(day)) return;
+  state.done[day] = isoDay();
+  save();
+  selectedDay = null;
+  if (day === TOTAL) toast("🎓 Программа пройдена! Статус «Выпускник».");
+  else toast(`День ${day} из ${TOTAL} закрыт. Следующее задание откроется завтра.`);
+  render();
+}
+
+/* ---------- контакты ---------- */
+function renderContacts() {
+  const cs = state.contacts;
+  const counts = Object.keys(STATUS_NAMES).map((k) => `${STATUS_NAMES[k]}: <b>${cs.filter((c) => c.status === k).length}</b>`);
+  $("cSummary").innerHTML = `Всего: <b>${cs.length}</b> ` + counts.map((c) => `<span>${c}</span>`).join("");
+  if (!cs.length) {
+    $("cTable").innerHTML = `<tbody><tr><td class="empty">Пока пусто. Начни с 10–20 самых тёплых контактов из списка 100 знакомых (задание дня 4).</td></tr></tbody>`;
+    return;
+  }
+  const today = isoDay();
+  const sorted = [...cs].sort((a, b) => (a.remindOn && !a.reminded ? a.remindOn : "9999") .localeCompare(b.remindOn && !b.reminded ? b.remindOn : "9999") || a.name.localeCompare(b.name, "ru"));
+  const rows = sorted.map((c) => {
+    const due = c.remindOn && !c.reminded && c.remindOn <= today;
+    const remind = c.remindOn && !c.reminded ? fmtDate(c.remindOn) + (due ? " · сегодня" : "") : "—";
+    const opts = Object.entries(STATUS_NAMES).map(([k, v]) => `<option value="${k}"${k === c.status ? " selected" : ""}>${v}</option>`).join("");
+    return `<tr class="${due ? "due" : ""}">
+      <td>${esc(c.name)}</td>
+      <td><select data-status="${c.id}" aria-label="Статус: ${esc(c.name)}">${opts}</select></td>
+      <td class="num">${remind}</td>
+      <td><div class="row-actions">
+        ${due ? `<button class="linkbtn" data-written="${c.id}">Написал(а)</button>` : ""}
+        <button class="linkbtn" data-later="${c.id}">+3 дня</button>
+        <button class="linkbtn danger" data-del="${c.id}">Удалить</button>
+      </div></td></tr>`;
+  }).join("");
+  $("cTable").innerHTML = `<thead><tr><th>Имя</th><th>Статус</th><th class="num">Напомнить</th><th></th></tr></thead><tbody>${rows}</tbody>`;
+
+  const find = (id) => state.contacts.find((c) => c.id === id);
+  $("cTable").querySelectorAll("[data-status]").forEach((s) => s.addEventListener("change", () => { find(s.dataset.status).status = s.value; save(); render(); }));
+  $("cTable").querySelectorAll("[data-written]").forEach((b) => b.addEventListener("click", () => { find(b.dataset.written).reminded = true; save(); toast("Отмечено. Можно поставить следующее напоминание."); render(); }));
+  $("cTable").querySelectorAll("[data-later]").forEach((b) => b.addEventListener("click", () => { const c = find(b.dataset.later); c.remindOn = addDays(isoDay(), 3); c.reminded = false; save(); render(); }));
+  $("cTable").querySelectorAll("[data-del]").forEach((b) => b.addEventListener("click", () => { state.contacts = state.contacts.filter((c) => c.id !== b.dataset.del); save(); render(); }));
+}
+
+$("cForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const name = $("cName").value.trim();
+  if (!name) { $("cName").focus(); toast("Впиши имя или ник контакта."); return; }
+  const n = Number($("cRemind").value);
+  state.contacts.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name, status: $("cStatus").value, remindOn: n ? addDays(isoDay(), n) : null, reminded: false });
+  save();
+  $("cName").value = "";
+  toast(n ? `Контакт добавлен. Напомню ${fmtDate(addDays(isoDay(), n))}.` : "Контакт добавлен.");
+  render();
+  $("cName").focus();
+});
+
+/* ---------- профиль ---------- */
+function renderProfile() {
+  const p = state.profile;
+  if (document.activeElement && $("profForm").contains(document.activeElement)) return;
+  $("pName").value = p.name; $("pRole").value = p.role; $("pGoal").value = p.goal; $("pMentor").value = p.mentor;
+}
+$("profForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const name = $("pName").value.trim();
+  if (!name) { toast("Имя не может быть пустым."); return; }
+  Object.assign(state.profile, { name, role: $("pRole").value, goal: $("pGoal").value.trim(), mentor: $("pMentor").value.trim() });
+  save(); document.activeElement.blur(); toast("Профиль сохранён."); render();
+});
+$("resetBtn").addEventListener("click", () => {
+  const box = $("resetConfirm");
+  box.hidden = false;
+  box.innerHTML = `<div class="confirm"><span>Удалить прогресс, цель и контакты с этого устройства?</span><button class="btn small" type="button" id="resetYes">Да, удалить</button><button class="btn quiet small" type="button" id="resetNo">Отмена</button></div>`;
+  $("resetYes").addEventListener("click", () => {
+    try { localStorage.removeItem(STORE_KEY); } catch (e) {}
+    state = null; selectedDay = null; box.hidden = true; setTab("tabTask"); render(); toast("Данные удалены.");
+  });
+  $("resetNo").addEventListener("click", () => { box.hidden = true; });
+});
+
+/* ---------- онбординг ---------- */
+$("onbForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const err = $("onbErr");
+  const name = $("fName").value.trim();
+  const goal = $("fGoal").value.trim();
+  if (!name) { err.textContent = "Впиши своё имя."; err.hidden = false; $("fName").focus(); return; }
+  if (!goal) { err.textContent = "Сформулируй цель на 90 дней, хотя бы одним предложением."; err.hidden = false; $("fGoal").focus(); return; }
+  if (!$("fConsent").checked) { err.textContent = "Поставь галочку, чтобы начать."; err.hidden = false; return; }
+  err.hidden = true;
+  state = {
+    profile: { name, role: document.querySelector('input[name="role"]:checked').value, goal, mentor: $("fMentor").value.trim() },
+    startedAt: isoDay(), done: {}, contacts: []
+  };
+  save(); render();
+  toast("Программа запущена. Первое задание уже открыто.");
+  $("cab").scrollIntoView({ block: "start" });
+});
+
+/* ---------- вкладки ---------- */
+const TABS = { tabTask: "paneTask", tabContacts: "paneContacts", tabProfile: "paneProfile" };
+function setTab(id) {
+  activeTab = id;
+  for (const [tab, pane] of Object.entries(TABS)) {
+    $(tab).setAttribute("aria-selected", String(tab === id));
+    $(pane).hidden = tab !== id;
+  }
+}
+Object.keys(TABS).forEach((id) => $(id).addEventListener("click", () => setTab(id)));
+
+/* ---------- проверка стоп-слов ---------- */
+const STOP = [
+  { re: /(вы|из)?леч(ит|ат|у|ение|ения|ебн\S*|ил\S*)/giu, alt: "«мне нравится», «стало частью режима»" },
+  { re: /исцел\S*/giu, alt: "«стало частью режима»" },
+  { re: /лекарств\S*|таблет\S*/giu, alt: "«продукт для ежедневного рациона»" },
+  { re: /детокс\S*|токсин\S*|шлак\S*/giu, alt: "«помогает выстроить привычку пить воду»" },
+  { re: /избав\S*\s+от/giu, alt: "«помогает выстроить привычку»" },
+  { re: /болезн\S*|диагноз\S*|иммунитет\S*/giu, alt: "говорите о привычках и образе жизни, без медицинских эффектов" },
+  { re: /похуд\S*|сжига\S*\s+жир\S*|минус\s+\d+\s*кг/giu, alt: "«питаюсь без жёстких диет, мне так удобнее»" },
+  { re: /до\s*\/\s*после|до\s+и\s+после/giu, alt: "история «было — поворот — стало» без фото тела" },
+  { re: /гарантир\S*(\s+\S+)?\s+доход\S*|доход\S*\s+гарантир\S*/giu, alt: "«результат зависит от твоих действий»" },
+  { re: /пассивн\S*\s+доход\S*|доход\S*\s+без\s+усилий|без\s+вложений\s+и\s+усилий/giu, alt: "«результат зависит от твоих действий»" },
+  { re: /миллион\S*\s+за\s+\S+|доход\s+от\s+[\d\s]+/giu, alt: "цифры действий (встречи, клиенты) вместо цифр дохода" },
+  { re: /100\s*%\s*(результат|эффект|гарант)\S*/giu, alt: "«у меня было так», без гарантий" },
+  { re: /партн[её]р\S*\s+meta|официальн\S*\s+партн[её]р\S*\s+(фейсбук|инстаграм|meta)/giu, alt: "нельзя называть себя партнёром Meta" },
+  { re: /пиши\s*\+|ставь\s*\+|есть\s+тема/giu, alt: "живое сообщение или призыв «напиши слово ПЛАН»" }
+];
+function checkText() {
+  const text = $("chkInput").value;
+  const hits = [];
+  for (const rule of STOP) {
+    rule.re.lastIndex = 0;
+    let m;
+    while ((m = rule.re.exec(text)) !== null) {
+      if (!m[0]) { rule.re.lastIndex++; continue; }
+      hits.push({ start: m.index, end: m.index + m[0].length, word: m[0], alt: rule.alt });
+    }
+  }
+  hits.sort((a, b) => a.start - b.start || b.end - a.end);
+  const kept = [];
+  let edge = -1;
+  for (const h of hits) if (h.start >= edge) { kept.push(h); edge = h.end; }
+
+  let html = "", pos = 0;
+  for (const h of kept) { html += esc(text.slice(pos, h.start)) + "<mark>" + esc(h.word) + "</mark>"; pos = h.end; }
+  html += esc(text.slice(pos));
+  $("chkOut").innerHTML = text.trim() ? html : '<span style="color:var(--muted)">Здесь появится текст с подсветкой.</span>';
+
+  const v = $("chkVerdict");
+  if (!text.trim()) { v.textContent = ""; v.className = "verdict"; }
+  else if (!kept.length) { v.textContent = "Рискованных слов не найдено. Если пост рекламный — пометь его «реклама» или «партнёрский материал»."; v.className = "verdict ok"; }
+  else { v.textContent = `Найдено рискованных слов: ${kept.length}. Замени их перед публикацией.`; v.className = "verdict bad"; }
+  $("chkHits").innerHTML = kept.map((h) => `<li><span class="bad">${esc(h.word)}</span><span>→ ${esc(h.alt)}</span></li>`).join("");
+}
+$("chkInput").addEventListener("input", checkText);
+
+/* ---------- внешние ссылки ---------- */
+document.querySelectorAll(".js-pay").forEach((a) => {
+  if (CONFIG.payUrl) { a.href = CONFIG.payUrl; a.target = "_blank"; a.rel = "noopener"; }
+  else a.addEventListener("click", (e) => { e.preventDefault(); toast(`Оплата тарифа «${a.dataset.plan}» откроется после подключения Kaspi / карт.`); });
+});
+document.querySelectorAll(".js-channel").forEach((a) => {
+  if (CONFIG.channelUrl) { a.href = CONFIG.channelUrl; a.target = "_blank"; a.rel = "noopener"; }
+  else a.addEventListener("click", (e) => { e.preventDefault(); toast("Ссылка на канал появится после запуска в декабре 2026."); });
+});
+
+/* обновлять баннеры, если страница открыта долго (вечернее напоминание, новый день) */
+setInterval(() => { if (state && !$("profForm").contains(document.activeElement) && !$("cForm").contains(document.activeElement)) render(); }, 60000);
+
+checkText();
+render();
+</script>
+
+</body>
+</html>
